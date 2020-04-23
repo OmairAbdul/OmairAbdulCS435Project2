@@ -4,7 +4,7 @@ public class TopSort {
         HashMap<Node, Integer> inDegree = KahnsGetInDegree(graph);
         ArrayList<Node> topSort = new ArrayList<Node>();
         Queue<Node> QUEUE = new LinkedList<Node>();
-        addNodesWithoutDependenciesToQueue(inDegree, QUEUE);
+        addNodesToQ(inDegree, QUEUE);
         while(!QUEUE.isEmpty()){
             Node currNode = QUEUE.poll();
             topSort.add(currNode);
@@ -13,7 +13,7 @@ public class TopSort {
                 inDegree.replace(neighbor, inDegree.get(neighbor) - 1);
             }
 
-            addNodesWithoutDependenciesToQueue(inDegree, QUEUE);
+            addNodesToQ(inDegree, QUEUE);
         }
         return topSort;
     }
@@ -33,7 +33,7 @@ public class TopSort {
     }
 
     // This function adds nodes with in-degree 0 to the passed in queue.
-    private static void addNodesWithoutDependenciesToQueue(HashMap<Node, Integer> inDegree, Queue<Node> q) {
+    private static void addNodesToQ(HashMap<Node, Integer> inDegree, Queue<Node> q) {
         Iterator<Node> it = inDegree.keySet().iterator();
         while(it.hasNext()){
             Node cN = it.next();

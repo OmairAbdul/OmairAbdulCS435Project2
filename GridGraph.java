@@ -2,7 +2,7 @@ import java.util.*;
 public class GridGraph {
     private HashSet<GridNode> allGridNodes = new HashSet<GridNode>();
 
-    public GridNode addGridNode(final int x, final int y, final String nodeVal){
+    public GridNode addGridNode(int x, int y, String nodeVal){
         GridNode newNode =  new GridNode(x, y, nodeVal);
         allGridNodes.add(newNode);
         return newNode;

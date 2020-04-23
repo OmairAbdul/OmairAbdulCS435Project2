@@ -12,14 +12,26 @@ public class Graph{
 
     // adds an undirected edge betweenfirstandsecond(and vice versa)
     public void addUndirectedEdge(final Node first, final Node second){
-        first.addToConnectedTo(second);
-        second.addToConnectedTo(first);
+        if(!first.getConnectedTo().contains(second)){
+            first.addToConnectedTo(second);
+        }
+        if(!second.getConnectedTo().contains(first)){
+            second.addToConnectedTo(first);
+        }
     }
 
     // removes an undirected edge betweenfirstandsecond(and vice versa)
     public void removeUndirectedEdge(final Node first, final Node second){
-        first.removeFromConnectedTo(second);
-        second.removeFromConnectedTo(first);
+        if(first.getConnectedTo().contains(second)){
+            first.removeFromConnectedTo(second);
+        }
+        else {
+            return;
+        }
+        if(second.getConnectedTo().contains(first)){
+            second.removeFromConnectedTo(first);
+        }
+
     }
 
     // returns a set of allNodes in the graph

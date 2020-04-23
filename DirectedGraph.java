@@ -13,7 +13,9 @@ public class DirectedGraph {
     }
 
     public void removeDirectedEdge(final Node first, final Node second){
-        first.removeFromConnectedTo(second);
+        if(first.getConnectedTo().contains(second)){
+            first.removeFromConnectedTo(second);
+        }
     }
 
     // returns a set of allNodes in the graph

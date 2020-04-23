@@ -2,10 +2,9 @@ import java.util.*;
 public class mainClass {
     public static Graph createRandomUnweightedGraphIter(int n){
         Graph newGraph = new Graph();
-        while(n != 0){
+        for(int i = n; i >0; i--){
             int r = new Random().nextInt(n*20);
             newGraph.addNode(String.valueOf(r));
-            n= n-1;
         }
         ArrayList<Node> allNodesList = new ArrayList<Node>(newGraph.getAllNodes());
         for(int i = 0; i < allNodesList.size(); i++){
@@ -22,9 +21,8 @@ public class mainClass {
         Graph newGraph = new Graph();
         int val = 1;
         Node prevNode = null;
-        while(n != 0){
+        for(int i = n; i >0; i--){
             Node currNode = newGraph.addNode(String.valueOf(val));
-            n= n-1;
             if(prevNode!=null){
                 newGraph.addUndirectedEdge(prevNode, currNode);
             }
@@ -57,7 +55,7 @@ public class mainClass {
 
     public static WeightedGraph createRandomCompleteWeightedGraph(int n){
         WeightedGraph newWG = new WeightedGraph();
-        while(n!=0){
+        while(n>0){
             int r = new Random().nextInt(n*20);
             newWG.addNode(String.valueOf(r));
             System.out.println(r);
@@ -200,7 +198,6 @@ public class mainClass {
             currA.add(manhattanDistCalc(s, destNode));
             nodesToDistances.put(s, currA);
         }
-        //System.out.println(nodesToDistances.get(sourceNode));
         boolean completionSwitch = false;
         while(!completionSwitch){
             //find the next node with the min distance
@@ -219,6 +216,10 @@ public class mainClass {
                 }
             }
 
+            if(currNode == destNode){
+                break;
+            }
+
             if(currNode == null || currNode.getConnectedTo().isEmpty()){
                 completionSwitch = true;
                 break;
@@ -228,7 +229,6 @@ public class mainClass {
             for(GridNode neighbor: currNode.getConnectedTo()){
                 if(nodesToDistances.containsKey(neighbor)){
                     if(nodesToDistances.get(neighbor).get(0) > 1 + nodesToDistances.get(currNode).get(0)){
-                        //System.out.println("helllllooooooooooodaod");
                         ArrayList<Integer> currArray = new ArrayList<Integer>();
                         currArray.add(1 + nodesToDistances.get(currNode).get(0));
                         currArray.add(manhattanDistCalc(currNode, destNode));
@@ -240,21 +240,33 @@ public class mainClass {
                     currArray.add(1 + nodesToDistances.get(currNode).get(0));
                     currArray.add(manhattanDistCalc(currNode, destNode));
                     nodesToDistances.put(neighbor, currArray);
-                    //nodesToDistances.put(neighbor, currArray);
                 }
-                /*ArrayList<Integer> currArray = new ArrayList<Integer>();
-                currArray.add(1 + nodesToDistances.get(currNode).get(0));
-                currArray.add(manhattanDistCalc(currNode, destNode));
-                nodesToDistances.put(neighbor, currArray);
-                nodesToDistances.put(neighbor, currArray);*/
             }
         }
-        //System.out.println(nodesToDistances);
-        for(GridNode n1: nodesToDistances.keySet()){
-            System.out.print(n1.getNodeVal() + " " + nodesToDistances.get(n1));
-            System.out.println();
+
+        //Create an array that consists of nodes which lead to the shortest path
+        ArrayList<GridNode> returnArray = new ArrayList<GridNode>();
+        if(visitedArray.get(visitedArray.size()-1) != destNode){
+            return returnArray;
         }
-        return visitedArray;
+
+
+        for(int i = 0; i < visitedArray.size(); i++){
+            returnArray.add(visitedArray.get(i));
+            GridNode nextNode;
+            int indexVal=-1;
+            for(int j = i+1; j<visitedArray.size(); j++){
+                if(visitedArray.get(i).getConnectedTo().contains(visitedArray.get(j))){
+                    nextNode = visitedArray.get(j);
+                    indexVal = j;
+                }
+            }
+            if(indexVal!=-1){
+                i=indexVal-1;
+            }
+        }
+        return returnArray;
+
     }
 
     public static int manhattanDistCalc(GridNode s, GridNode d){
@@ -263,6 +275,8 @@ public class mainClass {
     }
 
     public static void main(String[] args){
+
+        //ASTAR TEST
         /*GridNode sn = null;
         GridNode dn = null;
         GridGraph g1 = createRandomGridGraph(5);
@@ -281,6 +295,8 @@ public class mainClass {
             System.out.println(p.getNodeVal());
         }*/
 
+        // ASTAR TEST
+        /*
         GridGraph g2 = new GridGraph();
         GridNode n1 = g2.addGridNode(0, 0, "0,0");
         GridNode n2 = g2.addGridNode(0, 1, "0,1");
@@ -299,21 +315,29 @@ public class mainClass {
         GridNode n15 = g2.addGridNode(3, 2, "3,2");
         GridNode n16 = g2.addGridNode(3, 3, "3,3");
         g2.addUndirecteddEdge(n1, n2);
-        g2.addUndirecteddEdge(n1, n4);
+        g2.addUndirecteddEdge(n1, n6);
+        g2.addUndirecteddEdge(n1, n5);
         g2.addUndirecteddEdge(n2, n3);
-        g2.addUndirecteddEdge(n4, n5);
-        g2.addUndirecteddEdge(n5, n8);
-        g2.addUndirecteddEdge(n8, n9);
+        g2.addUndirecteddEdge(n3, n4);
+        g2.addUndirecteddEdge(n4, n8);
+        g2.addUndirecteddEdge(n8, n12);
+        g2.addUndirecteddEdge(n6, n11);
+        g2.addUndirecteddEdge(n5, n9);
+        g2.addUndirecteddEdge(n9, n13);
+        g2.addUndirecteddEdge(n13, n16);
+        //g2.addUndirecteddEdge(n5, n8);
+        //g2.addUndirecteddEdge(n8, n9);
 
-        System.out.println(astar(n1, n9));
-        for(GridNode p: astar(n1, n9)){
+        System.out.println(astar(n1, n16));
+        for(GridNode p: astar(n1, n16)){
             System.out.println(p.getNodeVal());
         }
-        /*Iterator<GridNode> it = g1.getAllGridNodes().iterator();
-        while(it.hasNext()){
-            GridNode gn = it.next();
-            System.out.println(gn.getNodeVal());
-        }*/
+        */
+
+        // End ASTAR TEST
+
+
+
         /*//Dijkstra test 1
         WeightedGraph fG = new WeightedGraph();
         Node n1 = fG.addNode("1");

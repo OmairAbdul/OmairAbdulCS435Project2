@@ -15,26 +15,29 @@ public class GraphSearch {
             return returnList;
         }
     }
-    public ArrayList<Node> DFSRecHelper(Node end, Stack<Node> s, ArrayList<Node> rA){
+    public ArrayList<Node> DFSRecHelper(Node end, Stack<Node> s, ArrayList<Node> returnArray){
         if(s.empty()){
-            return rA;
+            return returnArray;
         }
         Node currNode = s.pop();
-        if(rA.contains(currNode)){
-            DFSRecHelper(end, s , rA);
+        if(returnArray.contains(currNode)){
+            DFSRecHelper(end, s , returnArray);
         }
         else if(currNode == end){
-            rA.add(currNode);
-            return rA;
+            returnArray.add(currNode);
+            return returnArray;
         }
         else{
             for(Node neighbor : currNode.getConnectedTo()){
-                s.push(neighbor);
+                if(!s.contains(neighbor)){
+                    s.push(neighbor);
+                }
+
             }
-            rA.add(currNode);
-            DFSRecHelper(end, s , rA);
+            returnArray.add(currNode);
+            DFSRecHelper(end, s , returnArray);
         }
-        return rA;
+        return returnArray;
 
     }
 
@@ -49,7 +52,7 @@ public class GraphSearch {
             }
             if(currNode == end){
                 returnList.add(currNode);
-                break;
+                return returnList;
             }
             for(Node neighbor : currNode.getConnectedTo()){
                 STACK.push(neighbor);
@@ -62,9 +65,7 @@ public class GraphSearch {
             ArrayList<Node> emptyList = new ArrayList<>();
             return emptyList;
         }
-        else{
-            return returnList;
-        }
+        return returnList;
     }
 
     public ArrayList<Node> BFTRec(Graph graph){
@@ -86,22 +87,22 @@ public class GraphSearch {
         return returnArray;
 
     }
-    public ArrayList<Node> BFTRecHelper(Graph g, Queue<Node> q, ArrayList<Node> rA){
+    public ArrayList<Node> BFTRecHelper(Graph g, Queue<Node> q, ArrayList<Node> returnArray){
         if(q.isEmpty()){
-            return rA;
+            return returnArray;
         }
-        Node v = q.poll();
-        if(!rA.contains(v)){
-            rA.add(v);
+        Node currNode = q.poll();
+        if(!returnArray.contains(currNode)){
+            returnArray.add(currNode);
         }
-        for(Node neighbor : v.getConnectedTo()){
+        for(Node neighbor : currNode.getConnectedTo()){
             if(!neighbor.getIsVisited()) {
                 neighbor.setIsVisited(true);
                 q.add(neighbor);
             }
         }
-        BFTRecHelper(g, q, rA);
-        return rA;
+        BFTRecHelper(g, q, returnArray);
+        return returnArray;
     }
     public ArrayList<Node> BFTIter(final Graph graph){
         Queue<Node> QUEUE = new LinkedList<Node>();
